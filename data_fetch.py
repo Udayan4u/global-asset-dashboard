@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import datetime
+import streamlit as st
 
 ASSET_CLASSES = {
     'Equity': ['SPY', 'QQQ', 'VEU'],
@@ -26,6 +27,7 @@ TICKER_NAMES = {
     'USDJPY=X': 'USD/JPY'
 }
 
+@st.cache_data(ttl=1800)  # Cache for 30 minutes
 def get_prices(start_date='2024-01-01'):
     data = {}
     for cls, tickers in ASSET_CLASSES.items():
@@ -34,6 +36,7 @@ def get_prices(start_date='2024-01-01'):
         data[cls] = df
     return data
 
+@st.cache_data(ttl=1800)  # Cache for 30 minutes
 def get_volume_dollar(start_date='2025-01-01'):
     data = {}
     for cls, tickers in ASSET_CLASSES.items():
@@ -45,6 +48,7 @@ def get_volume_dollar(start_date='2025-01-01'):
         data[cls] = avg_dollar_vol.to_frame(name=f'{cls}_liquidity')
     return pd.concat(data.values(), axis=1)
 
+@st.cache_data(ttl=1800)  # Cache for 30 minutes
 def get_market_caps():
     caps = {}
     for cls, tickers in ASSET_CLASSES.items():
