@@ -11,6 +11,7 @@ st.title("🌍 Global Asset Class Liquidity & Flows Dashboard")
 st.markdown("Daily refresh using free yfinance data • Focus: where money is moving")
 
 # Sidebar
+st.sidebar.header("Controls")
 start_date = st.sidebar.date_input("Start Date", datetime.date(2025, 1, 1))
 refresh = st.sidebar.button("🔄 Refresh Data")
 
@@ -19,6 +20,7 @@ if 'data' not in st.session_state:
     st.session_state.data = {}
 
 if refresh or not st.session_state.data:
+    st.cache_data.clear()
     with st.spinner("Fetching latest market data from Yahoo Finance..."):
         prices = get_prices(start_date=start_date)
         liquidity = get_volume_dollar(start_date=start_date.strftime("%Y-%m-%d"))
